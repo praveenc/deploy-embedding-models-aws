@@ -25,11 +25,7 @@ def generate_embeddings(texts, model, tokenizer, normalize=True):
 
     # Tokenize the texts
     encoded_input = tokenizer(
-        texts,
-        max_length=512,
-        padding=True,
-        truncation=True,
-        return_tensors="pt"
+        texts, max_length=512, padding=True, truncation=True, return_tensors="pt"
     )
 
     encoded_input = encoded_input.to(device)
@@ -63,7 +59,7 @@ def model_fn(model_dir):
 
     model = {
         "embeddings_model": embeddings_model,
-        "embeddings_tokenizer": embeddings_tokenizer
+        "embeddings_tokenizer": embeddings_tokenizer,
     }
 
     return model

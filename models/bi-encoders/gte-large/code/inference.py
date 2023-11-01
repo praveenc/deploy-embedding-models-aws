@@ -103,7 +103,7 @@ def model_fn(model_dir):
 
     model = {
         "embeddings_model": embeddings_model,
-        "embeddings_tokenizer": embeddings_tokenizer
+        "embeddings_tokenizer": embeddings_tokenizer,
     }
 
     return model

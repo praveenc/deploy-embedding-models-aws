@@ -17,7 +17,7 @@ def get_hugging_face_image_uri(
     transformers_version: str = TRANSFORMERS_VER,
     pytorch_version: str = PYTORCH_VER,
     py_version: str = PYTHON_VER,
-    device: str = "cpu"
+    device: str = "cpu",
 ):
     """
     Get HuggingFace Inference Container uri
@@ -81,7 +81,7 @@ def create_deploy_huggingface_model(
     pytorch_version: str = PYTORCH_VER,
     serverless_config: ServerlessInferenceConfig = None,
     env: Dict = None,
-    wait: bool = False
+    wait: bool = False,
 ):
     """
     Refer to https://github.com/aws/deep-learning-containers/blob/master/available_images.md#huggingface-inference-containers
@@ -118,7 +118,7 @@ def create_deploy_huggingface_model(
             instance_type=instance_type,
             endpoint_name=endpoint_name,
             serverless_inference_config=serverless_config,
-            wait=wait
+            wait=wait,
         )
     else:
         print(f"Deploying {model_name} to {instance_type} real-time endpoint")
@@ -136,8 +136,8 @@ def get_endpoint_status(endpoint_name: str):
     sm_client = boto3.client("sagemaker")
     status = sm_client.describe_endpoint(EndpointName=endpoint_name)["EndpointStatus"]
     print(
-          f"[b]Endpoint:[/b] [b green]{endpoint_name}[/b green] | "
-          f"[b]Status:[/b] [i bright_red]{status}[/i bright_red]"
+        f"[b]Endpoint:[/b] [b green]{endpoint_name}[/b green] | "
+        f"[b]Status:[/b] [i bright_red]{status}[/i bright_red]"
     )
 
     # Get the waiter object
@@ -148,28 +148,30 @@ def get_endpoint_status(endpoint_name: str):
     # Get endpoint status using describe endpoint
     status = sm_client.describe_endpoint(EndpointName=endpoint_name)["EndpointStatus"]
     print(
-          f"[b]Endpoint:[/b] [b green]{endpoint_name}[/b green] | "
-          f"[b]Status:[/b] [i magenta3]{status}[/i magenta3] ✅"
+        f"[b]Endpoint:[/b] [b green]{endpoint_name}[/b green] | "
+        f"[b]Status:[/b] [i magenta3]{status}[/i magenta3] ✅"
     )
 
 
 def print_cloudwatch_logs(endpoint_name: str):
-    logs_client = boto3.client('logs')
+    logs_client = boto3.client("logs")
     end_time = datetime.utcnow()
     start_time = end_time - timedelta(hours=1)
 
-    log_group_name = f'/aws/sagemaker/Endpoints/{endpoint_name}'
+    log_group_name = f"/aws/sagemaker/Endpoints/{endpoint_name}"
     log_streams = logs_client.describe_log_streams(logGroupName=log_group_name)
-    log_stream_name = log_streams['logStreams'][0]['logStreamName']
+    log_stream_name = log_streams["logStreams"][0]["logStreamName"]
 
     # Retrieve the logs
     logs = logs_client.get_log_events(
         logGroupName=log_group_name,
         logStreamName=log_stream_name,
         startTime=int(start_time.timestamp() * 1000),
-        endTime=int(end_time.timestamp() * 1000)
+        endTime=int(end_time.timestamp() * 1000),
     )
 
     # Print the logs
-    for event in logs['events']:
-        print(f"{datetime.fromtimestamp(event['timestamp'] // 1000)}: {event['message']}")
+    for event in logs["events"]:
+        print(
+            f"{datetime.fromtimestamp(event['timestamp'] // 1000)}: {event['message']}"
+        )

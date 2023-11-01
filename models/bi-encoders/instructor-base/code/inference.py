@@ -3,7 +3,6 @@ import torch
 
 
 def model_fn(model_dir):
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model = INSTRUCTOR(model_dir)

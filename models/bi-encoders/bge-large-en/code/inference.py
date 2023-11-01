@@ -1,6 +1,5 @@
 import torch
 import torch.nn.functional as F
-from torch import Tensor
 from transformers import AutoModel, AutoTokenizer
 import logging
 
@@ -38,10 +37,9 @@ def generate_embeddings(texts, model, tokenizer, normalize=True):
         # Perform pooling. In this case, cls pooling.
         sentence_embeddings = model_output[0][:, 0]
 
-
     # Normalize embeddings if required
     if normalize:
-        sentence_embeddings = F.normalize(text_embeddings, p=2, dim=1)
+        sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
 
     # convert to numpy array
     sentence_embeddings = sentence_embeddings.cpu().numpy()
@@ -61,7 +59,7 @@ def model_fn(model_dir):
 
     model = {
         "embeddings_model": embeddings_model,
-        "embeddings_tokenizer": embeddings_tokenizer
+        "embeddings_tokenizer": embeddings_tokenizer,
     }
 
     return model
